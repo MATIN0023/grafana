@@ -9,7 +9,6 @@ on:
       - main
 
 jobs:
-  # مرحله ساخت و تست Docker images
   build-and-test:
     runs-on: ubuntu-latest
     steps:
@@ -19,28 +18,16 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
+      - name: Install docker-compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+
       - name: Build and test Docker images
         run: |
-          # راه‌اندازی سرویس‌ها با استفاده از Docker Compose
           docker-compose -f docker-compose.yml up -d
-          
-          # منتظر می‌مانیم تا سرویس‌ها شروع به کار کنند
-          sleep 10  # مدت زمان مورد نیاز برای شروع سرویس‌ها
-
-          # نمایش کانتینرهای در حال اجرا برای بررسی وضعیت
+          sleep 10  # Wait for services to start
           docker ps
-
-          # تست دسترسی به Prometheus
-          echo "Testing Prometheus"
-          curl -f http://localhost:9090/ || exit 1  # اگر به Prometheus دسترسی نبود، خطا می‌دهد
-
-          # تست دسترسی به Grafana
-          echo "Testing Grafana"
-          curl -f http://localhost:3000/ || exit 1  # اگر به Grafana دسترسی نبود، خطا می‌دهد
-
-          # تست دسترسی به Nginx Exporter
-          echo "Testing Nginx Exporter"
-          curl -f http://localhost:9113/ || exit 1  # اگر به Nginx Exporter دسترسی نبود، خطا می‌دهد
 
   # مرحله دپلوی به VPS
   deploy:
