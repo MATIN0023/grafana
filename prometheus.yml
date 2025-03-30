@@ -1,0 +1,84 @@
+global:
+  scrape_interval: 15s
+rule_files:
+  - "/etc/prometheus/prometheus.rule.yml"
+
+scrape_configs:
+  - job_name: 'node'
+    static_configs:
+      - targets: ['node-exporter:9100']
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: ip
+        regex: '^.*$'
+        replacement: '192.168.53.1'
+
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: ip
+        regex: '^.*$'
+        replacement: '192.168.54.1'
+
+
+
+  - job_name: 'mikrotik'
+    static_configs:
+      - targets: ['192.168.10.3:49090']
+    metrics_path: '/metrics'
+
+
+      #  - job_name: 'ali'
+      #    static_configs:
+      #      - targets: ['94.101.185.7:8005']
+      #    metrics_path: '/metrics'
+  - job_name: 'sql_backup_status'
+    static_configs:
+      - targets: ['94.101.185.7:8000']
+    metrics_path: '/metrics'
+      #relabel_configs: 
+      #- source_labels: [__name__]
+      #  target_label: name
+      #  regex: 'mktxp_kid_control_device_idle_time'
+      # - source_labels: [__name__]
+      #  target_label: name
+      #  regex: 'mktxp_dhcp_lease_info'
+      #- source_labels: [mac_address]
+      #  target_label: mac_address
+   # - source_labels: [address]
+   #  target_label: ip
+      #relabel_configs:
+      #- source_labels: [__name__]
+        #target_label: name
+          #regex: 'mktxp_kid_control_device_idle_time|mktxp_dhcp_lease_info'
+        #source_labels: [address]
+          # target_label: ip_address
+          # - job_name: 'mikrotik'
+          #static_configs:
+          #- targets: ['192.168.10.3:49090']
+          #metrics_path: '/metrics'
+    relabel_configs:
+      - source_labels: [__name__]
+        target_label: name
+        regex: 'mktxp_kid_control_device_idle_time'
+      - source_labels: [job]
+        target_label: job
+        regex: '(.+)'
+      - source_labels: [__name__]
+        target_label: name
+        regex: 'mktxp_dhcp_lease_info'
+      - source_labels: [job]
+        target_label: job
+        regex: 'mktxp_dhcp_lease_info(.+)active_mac_address=(.+),address=(.+),client_id.+'
+          #replacement: '${3}'
+          #target_label: 'host'
+          #- source_labels: [__address__]
+          #target_label: adddd
+
+          #- source_labels: [mac_address]
+          # target_label: mac_address
+          #- source_labels: [address , mac_address]
+          #target_label: mac_ip
+          

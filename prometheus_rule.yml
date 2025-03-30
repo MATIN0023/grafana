@@ -1,0 +1,12 @@
+groups:
+  - name: example-metrics
+    rules:
+      - record: mktxp_dhcp_lease_info_recorded
+        expr: mktxp_dhcp_lease_info
+        labels:
+          source: "dhcp_lease"
+
+      - record: mktxp_kid_control_device_idle_time_recorded
+        expr: mktxp_kid_control_device_idle_time
+        labels:
+          source: "kid_control_device"

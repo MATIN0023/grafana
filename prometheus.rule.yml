@@ -1,0 +1,9 @@
+groups:
+   - name: exampel_group
+     rules: 
+       #- record: mktxp_kid_control_device_idle_time_all
+        #  expr: avg(mktxp_kid_control_device_idle_time) + avg(mktxp_dhcp_lease_info) by (instance)
+        #labels:
+          #  source: "combined_metrics"
+         - record: metric2_with_ip
+           expr: mktxp_kid_control_device_idle_time * on(mac_address) group_left(ip_address) mktxp_kid_control_device_info
