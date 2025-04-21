@@ -18,17 +18,17 @@ services:
     image: grafana/grafana:latest
     container_name: grafana
     restart: unless-stopped
-    ports:
-      - "3000:3000"
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_SMTP_ENABLED=true
+      - GF_SMTP_HOST=smtp:8025
+      - GF_SMTP_FROM_ADDRESS=alert@alert.shemsh.ir
+      - GF_SERVER_DOMAIN=https://mon.shemsh.ir
+      - GF_SERVER_ROOT_URL=https://mon.shemsh.ir
     volumes:
-      - grafana3_data:/var/lib/grafana:rw
-    depends_on:
-      - prometheus
+      - grafana_data:/var/lib/grafana 
     networks:
       - monitoring_network
-
   nginx-exporter:
     image: nginx/nginx-prometheus-exporter:latest
     container_name: nginx-exporter
