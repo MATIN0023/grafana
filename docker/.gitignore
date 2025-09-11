@@ -1,0 +1,5 @@
+docker-compose.swap.yml
+odoo_addons
+'~odoo'
+odoo.conf
+.swp
